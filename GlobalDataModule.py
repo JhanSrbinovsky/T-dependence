@@ -2,12 +2,15 @@
 #import python modules
 import numpy as np 
 
-def SetIndependents( Independents ):
+def SetIndependents( indies, GD ):
     
     # Temperatures in Kelvin
-    Independents.T_ref= 25.0 
-    Independents.Temperature = np.linspace(0,360,100)
+    #Tmin = GlobalDefs.Tmin 
+    #Tmax = GlobalDefs.Tmax 
+    #nx = GlobalDefs.n
+   
+    indies.Temperature = np.linspace(GD.Tmin, GD.Tmax, GD.nx)
      
-    print '\n Temperature: ', Independents.Temperature 
+    #print '\n Temperature: ', indies.Temperature 
 
  

@@ -21,24 +21,29 @@ def main(argv):
     
     class Independents(object):
         def __init__(self):
-            # Check per line "label" in configfile defining the type
-            # of the following argument 
-    #        self.ClassArray =  [ "egName", "egPath" ]
-    #        # Declare ClassArray as mutable here so can be modified 
-    #        # by a called function:
-            self.np.Temperature = []
-            self.T_ref 
+            self.T_ref = 25.0
+            self.Temperature = [] 
     
+    class GlobalDefs(object):
+        def __init__(self):
+            self.nx = 100 
+            self.Tmin = 0.0
+            self.Tmax = 360.0
+       
     # insert a break from the CLI for reading output
     print "\n"
   
-    # Call global_data 
-    SetIndependents( Independents )
-    print '\n Temperature: ', Independents.Temperature 
-    print '\n T_ref: ', Independents.T_ref
+    #instantiate class
+    indies = Independents( )
+    globs = GlobalDefs()
     
-    # Call function 
-    #function(arg, arg )
+    ## Call global_data 
+    SetIndependents( indies, globs )
+    print '\n Temperature: ', indies.Temperature 
+    print '\n T_ref: ', indies.T_ref
+    
+    ## Call function 
+    ##function(arg, arg )
    
 
 
