@@ -11,11 +11,11 @@ __author__ = 'Jhan Srbinovsky'
 #import python modules
 import sys
 import numpy as np 
-#import pylab as pl
+import pylab as pl
 
 #import local, application specific modules
 from GlobalDataModule import SetIndependents
-from Tdep_KK import Tdep_KK_func 
+from Tdep_KK import Tdep_KK
 
 #def main(argv):
     
@@ -25,9 +25,9 @@ class GlobalDefs(object):
    def __init__(self):
       self.nIndeps = 10           #defines number of model configs
       self.nParConfigs = 100       #defines number of model configs
-      self.nx = 100                #defines gradiation of model
-      self.Tmin = 0.0
-      self.Tmax = 360.0
+      self.nx = 10                #defines gradiation of model
+      self.Tmin = 280.0
+      self.Tmax = 330.0
 
 class Constants(object):
    def __init__(self):
@@ -35,12 +35,13 @@ class Constants(object):
 
 class Independents(object):
    def __init__(self):
-      self.Temperature = []   # leaf temperature. set array of nx vals in 
+      self.T_leaf = []   # leaf temperature. set array of nx vals in 
                              # range(Tmin,Tmax)
 
 # KK(2007) actually gives values per plant
-class BiomeDepParams(object):
+class BiomeDepParams_KK(object):
    def __init__(self):
+      self.T_ref_25 = 277.13 + 25.
       self.Vcmax_25 = [] 
       self.Jmax_25  = [] 
       self.H_a      = []         # activation energy
@@ -48,7 +49,7 @@ class BiomeDepParams(object):
       self.DeltaS   = []         # Entropy factor
 
 # KK(2007) actually gives values per plant
-class PlantDepParams(object):
+class PlantDepParams_KK(object):
    def __init__(self):
       self.H_a       = []         # activation energy
       self.H_d       = []         # de-activation energy
@@ -76,9 +77,9 @@ gl = GlobalDefs()
 #   ins.append( Independents() )
 ins = Independents() 
 
-#for i in range(gl.nParConfigs):
-#   bi.append( BiomeDepParams() )
-#   pl.append( PlantDepParams() )
+for i in range(gl.nParConfigs):
+   bi.append( BiomeDepParams_KK() )
+   pl.append( PlantDepParams_KK() )
 
 #######################
 
@@ -87,7 +88,7 @@ ins = Independents()
 SetIndependents( ins, gl )
 
 ## Call function 
-Tdep_KK_func( ins, K, bi, pl )
+Tdep_KK( ins, K, bi, pl )
    
 
 

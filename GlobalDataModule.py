@@ -9,7 +9,7 @@ def SetIndependents( ins, gl ):
     #Tmax = GlobalDefs.Tmax 
     #nx = GlobalDefs.n
    
-    ins.Temperature = np.linspace(gl.Tmin, gl.Tmax, gl.nx)
+    ins.T_leaf = np.linspace(gl.Tmin, gl.Tmax, gl.nx)
     #ins(1).Temperature = np.linspace(gl.Tmin, gl.Tmax, gl.nx)
      
     #print '\n Temperature: ', ins(1).Temperature 
