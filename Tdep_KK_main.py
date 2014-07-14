@@ -17,7 +17,6 @@ from Speices_KK import Set_plants
 def Tdep_KK_main( T_leaf, Vcmax, Jcmax, K, nBiomes, nPlants ):
 
    T_ref = 277.13 + 25. # reference temp. at 25 deg-C
-
   
    # insert a break from the CLI for reading output
    print "\n"
@@ -28,10 +27,12 @@ def Tdep_KK_main( T_leaf, Vcmax, Jcmax, K, nBiomes, nPlants ):
    
    # Set Biome dependent PArameters
    Set_plants( nPlants, pl ) 
+
    BiomeIndex = np.zeros( nBiomes ) 
    BiomeIndex[0] = 17 - 0
    BiomeIndex[1] = 26 - 18
    BiomeIndex[2] = 53 - 27
+
    Set_biomes( nBiomes, bi, nPlants, pl, BiomeIndex ) 
    
    # Vcmax & Jmax described by KK(2007) Eq.(1)

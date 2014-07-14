@@ -16,15 +16,18 @@ import matplotlib.pyplot as plt
 #import local, application specific modules
 from Tdep_KK_main import Tdep_KK_main
 
+#End Header
+#########################################################################
+
 HowManyModels = 2
 
 # Set domain model[0].x: Leaf Temperature (Kelvin) 
 # with nx grads from Tmin:Tmax
-T0_degC = 277.13
-Tmin0_decC = 0.
-Tmax0_decC = 40.
-Tmin0 = Tmin0_decC + T0_degC 
-Tmax0 = Tmax0_decC + T0_degC 
+T0C_degK = 277.13
+Tmin0_degC = 0.
+Tmax0_degC = 40.
+Tmin0 = Tmin0_degC + T0C_degK 
+Tmax0 = Tmax0_degC + T0C_degK 
 nT_L = 100
 nBiomes_KK = 3 
 nPlants_KK =  54 
@@ -71,11 +74,11 @@ Tdep_KK_main( model[0].x, model[0].y, model[1].y, K, nBiomes_KK, nPlants_KK )
 ## plot generically x against y
 ##plot_generic( model[0].x, model[0].y )
 ##import pylab as pl
-x= model[0].x - T0_degC 
+x= model[0].x - T0C_degK 
 y= model[0].y[0]
 
-#plt.plot( x, y, 'bo' )
-#plt.show()
+plt.plot( x, y, 'bo' )
+plt.show()
 
 #######################
 
