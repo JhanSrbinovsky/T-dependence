@@ -73,12 +73,13 @@ Tdep_KK_main( model[0].x, model[0].y, model[1].y, K, nBiomes_KK, nPlants_KK )
 ##import pylab as pl
 x= model[0].x - T0_degC 
 y= model[0].y[0]
-print x,y 
+
 #x= np.array( range(20))
 #y=x 
 #y = np.model[0].y
-plt.plot( x, y, 'bo' )
-plt.show()
+
+#plt.plot( x, y, 'bo' )
+#plt.show()
 
 #######################
 

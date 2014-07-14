@@ -10,29 +10,15 @@ import numpy as np
 #import pylab as pl
 
 #import local, application specific modules
-from Tdep_KK_funcs import Tdep_KK_func, Set_bi
+from Tdep_KK_funcs import Tdep_KK_func
+from Biomes_KK import Set_biomes
+from Speices_KK import Set_plants
 
 def Tdep_KK_main( T_leaf, Vcmax, Jcmax, K, nBiomes, nPlants ):
 
    T_ref = 277.13 + 25. # reference temp. at 25 deg-C
 
-   # KK(2007) actually gives values per plant
-   class BiomeDepParams_KK(object):
-      def __init__(self):
-         self.Vcmax_25 = 0. 
-         self.Jmax_25  = 0. 
-         self.H_a      = 0.      # activation energy
-         self.H_d      = 0.      # de-activation energy
-         self.DeltaS   = 0.      # Entropy factor
-
-   class PlantDepParams_KK(object):
-      def __init__(self):
-         self.Vcmax_25 = 0. 
-         self.Jmax_25  = 0. 
-         self.H_a      = 0.      # activation energy
-         self.H_d      = 0.      # de-activation energy
-         self.DeltaS   = 0.      # Entropy factor
-   
+  
    # insert a break from the CLI for reading output
    print "\n"
    
@@ -40,18 +26,14 @@ def Tdep_KK_main( T_leaf, Vcmax, Jcmax, K, nBiomes, nPlants ):
    ########################
    bi = []
    pl = []
-   
-   for i in range( nBiomes):
-      bi.append( BiomeDepParams_KK() )
+   Set_plants( nPlants, pl ) 
+   Set_biomes( nBiomes, bi, nPlants, pl ) 
 
-   for i in range( nPlants):
-      pl.append( PlantDepParams_KK() )
-   
    ########################
    
    # Set Biome dependent PArameters
-   for j in range( nBiomes):
-      Set_bi( j, bi)
+   #for j in range( nBiomes):
+   #   Set_bi( j, bi)
 
    # Vcmax & Jmax described by KK(2007) Eq.(1)
    
