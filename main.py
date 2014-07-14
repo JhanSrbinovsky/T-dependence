@@ -17,6 +17,13 @@ from Tdep_KK_main import Tdep_KK_main
 
 HowManyModels = 2
 
+# Set domain model[0].x: Leaf Temperature (Kelvin) 
+# with nx grads from Tmin:Tmax
+Tmin0 = 290. 
+Tmax0 = 330.
+nx0 = 10
+
+
 #commented to run interactively
 #def main(argv):
     
@@ -44,11 +51,7 @@ for i in range(HowManyModels):
 #######################
 
 # Set domain of Leaf Temperature (Kelvin) with nx grads from Tmin:Tmax
-Tmin = 290. 
-Tmax = 330.
-nx = 10
-
-model[0].x = np.linspace(Tmin, Tmax, nx)
+model[0].x = np.linspace(Tmin0, Tmax0, nx0)
 
 
 # call model(s)
