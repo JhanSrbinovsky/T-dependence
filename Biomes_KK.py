@@ -12,7 +12,7 @@ def Set_biomes( nBiomes, bi, nPlants, pl ):
 
    for i in range( nBiomes ):
       bi.append( BiomeDepParams_KK() )
-
+   i= 0
    bi[i].Vcmax_25 = 78.2 
    #bi[i].Jmax_25 = 1.
 
