@@ -22,25 +22,23 @@ def Tdep_KK_main( T_leaf, Vcmax, Jcmax, K, nBiomes, nPlants ):
    # insert a break from the CLI for reading output
    print "\n"
    
-   ##instantiate classes
-   ########################
+   # instantiate classes
    bi = []
    pl = []
-   Set_plants( nPlants, pl ) 
-   Set_biomes( nBiomes, bi, nPlants, pl ) 
-
-   ########################
    
    # Set Biome dependent PArameters
-   #for j in range( nBiomes):
-   #   Set_bi( j, bi)
-
+   Set_plants( nPlants, pl ) 
+   BiomeIndex = np.zeros( nBiomes ) 
+   BiomeIndex[0] = 17 - 0
+   BiomeIndex[1] = 26 - 18
+   BiomeIndex[2] = 53 - 27
+   Set_biomes( nBiomes, bi, nPlants, pl, BiomeIndex ) 
+   
    # Vcmax & Jmax described by KK(2007) Eq.(1)
    
    # Kmax = K_25 * f(T_leaf) [ described by fn_T_L here ]
 
-   # in the first instance eveluat f(T_leaf) and use prescribed values of K_25
-
+   # eveluate f(T_leaf) per biome 
    fn_T_L = np.zeros((nBiomes, len( T_leaf ) ))
 
    ## Call function 
@@ -49,8 +47,6 @@ def Tdep_KK_main( T_leaf, Vcmax, Jcmax, K, nBiomes, nPlants ):
          #fn_T_L.append( Tdep_KK_func( j, T_leaf[i], T_ref, K.R_gas, bi ) )
          fn_T_L[j][i] = Tdep_KK_func( j, T_leaf[i], T_ref, K.R_gas, bi,pl )
   
-   #print "fn_T_L", type(fn_T_L) 
-   #print "fn_T_L", fn_T_L[0] 
    # Vcmax & Jmax described by KK(2007) Eq.(1)
    for j in range( nBiomes ):
       for i in range( len( T_leaf ) ):
