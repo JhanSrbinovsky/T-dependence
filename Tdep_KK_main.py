@@ -1,8 +1,4 @@
-#!/usr/bin/python #-i
-# use -i here to drop into innteractive mode t end of script
-# and preserve namespcei. have to comment out below as well
-
-__author__ = 'Jhan Srbinovsky'
+#!/usr/bin/python 
 
 # main program governing iT-dependence Kattage & Knorr (KK) 
 
@@ -14,41 +10,48 @@ import numpy as np
 #import pylab as pl
 
 #import local, application specific modules
-from Tdep_KK import Tdep_KK_func, Set_bi
+from Tdep_KK_funcs import Tdep_KK_func, Set_bi
 
-def Tdep_KK_main( T_leaf, Vcmax, Jcmax, K ):
+def Tdep_KK_main( T_leaf, Vcmax, Jcmax, K, nBiomes, nPlants ):
 
    T_ref = 277.13 + 25. # reference temp. at 25 deg-C
-   HowManyBiomes = 2 
 
    # KK(2007) actually gives values per plant
    class BiomeDepParams_KK(object):
       def __init__(self):
-         #self.Vcmax_25 = [] 
-         #self.Jmax_25  = [] 
-         self.H_a      = []         # activation energy
-         self.H_d      = []         # de-activation energy
-         self.DeltaS   = []         # Entropy factor
+         self.Vcmax_25 = 0. 
+         self.Jmax_25  = 0. 
+         self.H_a      = 0.      # activation energy
+         self.H_d      = 0.      # de-activation energy
+         self.DeltaS   = 0.      # Entropy factor
+
+   class PlantDepParams_KK(object):
+      def __init__(self):
+         self.Vcmax_25 = 0. 
+         self.Jmax_25  = 0. 
+         self.H_a      = 0.      # activation energy
+         self.H_d      = 0.      # de-activation energy
+         self.DeltaS   = 0.      # Entropy factor
    
    # insert a break from the CLI for reading output
    print "\n"
-   #print "T_leaf ", T_leaf 
-   #print "K ", K.R_gas
    
    ##instantiate classes
    ########################
    bi = []
-   #pl = []
+   pl = []
    
-   for i in range( HowManyBiomes):
+   for i in range( nBiomes):
       bi.append( BiomeDepParams_KK() )
-   #   pl.append( PlantDepParams_KK() )
+
+   for i in range( nPlants):
+      pl.append( PlantDepParams_KK() )
    
    ########################
    
    # Set Biome dependent PArameters
-   for i in range( HowManyBiomes):
-      Set_bi( i,bi)
+   for j in range( nBiomes):
+      Set_bi( j, bi)
 
    # Vcmax & Jmax described by KK(2007) Eq.(1)
    
@@ -56,18 +59,55 @@ def Tdep_KK_main( T_leaf, Vcmax, Jcmax, K ):
 
    # in the first instance eveluat f(T_leaf) and use prescribed values of K_25
 
-   fn_T_L = []
-   
-   ### Call function 
-   for i in range( len( T_leaf ) ):
-      fn_T_L.append( Tdep_KK_func( 1, T_leaf[i],T_ref, K.R_gas, bi ) )
+   fn_T_L = np.zeros((nBiomes, len( T_leaf ) ))
 
-   
-##if running purely as a script from the command line
-#################################################################################
-##if __name__ == "__main__":
-##   main(sys.argv[1:])
-#
+   ## Call function 
+   for j in range( nBiomes ):
+      for i in range( len( T_leaf ) ):
+         #fn_T_L.append( Tdep_KK_func( j, T_leaf[i], T_ref, K.R_gas, bi ) )
+         fn_T_L[j][i] = Tdep_KK_func( j, T_leaf[i], T_ref, K.R_gas, bi,pl )
+  
+   #print "fn_T_L", type(fn_T_L) 
+   #print "fn_T_L", fn_T_L[0] 
+   # Vcmax & Jmax described by KK(2007) Eq.(1)
+   for j in range( nBiomes ):
+      for i in range( len( T_leaf ) ):
+         Vcmax[j][i]= bi[j].Vcmax_25 * fn_T_L[j][i]
+         Vcmax[j][i]= fn_T_L[j][i]
+         #print "Vcmax ", Vcmax[j][i]
+         #print "V_25 ", bi[j].Vcmax_25
+         #print "fn ", fn_T_L[j][i]
+  
+   #for i in range( nBiomes):
+   #   for j in range( len( T_leaf ) ):
+   #      Vcmax = Vcmax_25[i] * fn_T_L[j]
+
+
 ################################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

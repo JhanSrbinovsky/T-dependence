@@ -1,9 +1,9 @@
 import math as m
-#assume only one bi, pl etc
+import numpy as np
 
 ###############################################################################
 
-def Tdep_KK_func( i, T_L, T_ref, R_gas, bi ):
+def Tdep_KK_func( i, T_L, T_ref, R_gas, bi, pl ):
    
    # Activation moderated by deactivation
    
@@ -26,9 +26,9 @@ def Tdep_KK_func( i, T_L, T_ref, R_gas, bi ):
    # leaf Temperature
    Entropy_leaf = ( T_L * bi[i].DeltaS ) - bi[i].H_d
    norm_leaf = R_gas * T_L
-   Deactiv_ref = 1. + Tdep_KK_funcExpFuncs( Entropy_ref, norm_ref )
+   Deactiv_leaf = 1. + Tdep_KK_funcExpFuncs( Entropy_ref, norm_ref )
   
-   fn_T_L =  Activation * Entropy_ref / Deactiv_ref 
+   fn_T_L =  Activation * Deactiv_ref / Deactiv_leaf
    
    return fn_T_L
 
@@ -44,12 +44,19 @@ def Tdep_KK_funcExpFuncs( numer, denom ):
 
 def Set_bi( i,bi ):
    #print "Set_bi"
-   #bi[1].Vcmax_25 = 1. 
-   #bi[1].Jmax_25 = 1.
+   bi[i].Vcmax_25 = 78.2 
+   #bi[i].Jmax_25 = 1.
 
-   bi[i].H_a = 84917.
+   #bi[i].rjV = 1.97 #+/- 0.07
+   
+   bi[i].H_a = 72.0 *1000.0 #+/- 3.3 (kJ) 
+   bi[i].DeltaS = 649.0 #+/- 1.43
    bi[i].H_d = 200000.
-   bi[i].DeltaS = 648.2
+
+   # Jmax    
+   # Jmaxbi[i].H_a = 50.0 *1000.0 #+/- 2.4 
+   # Jmaxbi[i].DeltaS = 646.0 #+/- 1.66
+   # Jmaxbi[i].H_d = 200000.
        
    
 ###############################################################################
