@@ -1,36 +1,34 @@
 import numpy as np
+import sys 
 
-def Set_plants( nPlants, nBiomes, pl, lines ): 
-   print "Set Plants "   
+def Set_plants( nlines, nBiomes, pl, lines ): 
    
    # Loop over all of these read lines
-   for ll in range( nPlants ):
+   ll = 0
+   for l in range( nlines ):
 
       # Create a string from each line
-      lstr = str(lines[ll])
+      lstr = str(lines[l])
       # nullify case sensitivity in that string
       lstr = lstr.lower()
 
       # if it is meant to be interpreted - interpret based on what
       # it starts with. See configfile example format
       # check if the string is a comment
+      cfield = lines[l].strip().split()
       if not lstr.startswith('#'):
-         cfield = lines[ll].strip().split()
          pl.PlNumber[ll] = (cfield[0])
          pl.BiNumber[ll] = (cfield[1])
-         pl.Vcmax_25[ll] = (cfield[2])
-         pl.H_a[ll] = (cfield[3])
+         pl.Vcmax_25[ll] = (cfield[4])
+         pl.H_a[ll] = (cfield[5])
          pl.H_d[ll] = (200000.)
-         pl.DeltaS[ll] = (cfield[4])
+         pl.DeltaS[ll] = (cfield[6])
+         ll = ll + 1
+         
          #pl.Jmax_25.append(cfield[0])
-
-         print pl.PlNumber[ll]
-         print pl.BiNumber[ll]
-         print pl.Vcmax_25[ll]
-         print pl.H_a[ll]
-         print pl.H_d[ll]
-         print pl.DeltaS[ll]
-         #pl.Jmax_25.append(cfield[0])
+   
+   nBiomes.append( int( pl.BiNumber[ll-1] ) )
+   return ll 
          ## Mode
          #if lstr.startswith( "mode" ):
          #   cfield = lines[ll].strip().split()

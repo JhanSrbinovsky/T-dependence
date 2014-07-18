@@ -76,7 +76,7 @@ print "\n"
 
 # Model 1 - KK T-dependence
 
-# Fix nBiomes[0], nPlants[0] from dataSet
+# Fix nBiomes[i], nPlants[i] from dataSet
 nBiomes     = [] 
 nPlants     = [] 
 
@@ -88,8 +88,6 @@ ifile = "KK_dataset.txt"
 # KK Temperature dependence model
 Tdep_KK_main( model[0].x, model[0].y, model[1].y, K, nBiomes, nPlants, ifile )
 
-sys.exit()
-
 #########################################################################
 
 # plot model(s)
@@ -98,23 +96,55 @@ sys.exit()
 #plot_generic( model[0].x, model[0].y )
 
 
-# plot First Biome, T-dependence KK 
-x= model[0].x - T0C_degK 
-y= model[0].y[0]     #this is first dim(biome)=0
-plt.plot( x, y, '-', linewidth=1 )
+# plot KK instance for T-dependence - averaged params other than PFT dep. Vcmax 
+x= model[0].x - T0C_degK
 
-# plot Second Biome, T-dependence KK 
-y= model[0].y[1]     #this is first dim(biome)=1
-plt.plot( x, y, 'r-', linewidth=1 )
-#plt.plot( x, y, 'rs' )
+y1= model[1].y[0]     
+plt.subplot(2, 1, 1)
+plt.plot(x, y1, 'g-', linewidth=1 )
+plt.title('KK - per biome')
+plt.ylabel('Vcmax/Vcmax_25')
 
-# plot Third Biome, T-dependence KK 
-y= model[0].y[2]     #this is first dim(biome)=2
-plt.plot( x, y, 'g-', linewidth=1 )
-#plt.plot( x, y, 'go' )
+y2= model[0].y[0]     
+plt.subplot(2, 1, 2)
+plt.plot(x, y2, 'g-', linewidth=1 )
+
+y2= model[0].y[1]     
+plt.subplot(2, 1, 2)
+plt.plot(x, y2, 'r-', linewidth=1 )
+
+y2= model[0].y[2]     
+plt.subplot(2, 1, 2)
+plt.plot(x, y2, 'b-', linewidth=1 )
+
+plt.xlabel('Leaf Temperature (deg C)')
+plt.ylabel('Vcmax')
 
 plt.show()
 
+
+
+#plt.plot( x, y, 'bd' )
+#
+#
+##this is first dim(biome)=0
+#y= model[0].y[0]     
+#plt.plot( x, y, '-', linewidth=1 )
+#
+##sys.exit()
+## plot Second Biome, T-dependence KK 
+#y= model[0].y[1]     #this is first dim(biome)=1
+#plt.plot( x, y, 'r-', linewidth=1 )
+#
+###plt.plot( x, y, 'rs' )
+#
+## plot Third Biome, T-dependence KK 
+#y= model[0].y[2]     #this is first dim(biome)=2
+#plt.plot( x, y, 'g-', linewidth=1 )
+###plt.plot( x, y, 'go' )
+#
+#
+#plt.show()
 #######################
 
 #if running purely as a script from the command line
