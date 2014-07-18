@@ -22,12 +22,12 @@ from DataSet import Read_dataset
 
 # GLOBAL model parmeters
 
-HowManyModels  = 2
+HowManyModels  =3 
 
 # Set domain model[0].x: Leaf Temperature (Kelvin) 
 # with nT_L grads from Tmin:Tmax
 nT_L = 100
-nBiomes_max = 20
+n_max = 200
 # 0 deg-C in K
 T0C_degK = 277.13
 
@@ -48,7 +48,7 @@ Tmax0 = Tmax0_degC + T0C_degK
 class Models(object):
    def __init__(self):
       self.x = np.zeros(nT_L) 
-      self.y = np.zeros( (nBiomes_max, nT_L) ) # assumes1:1 mapping b/n x&y
+      self.y = np.zeros( (n_max, nT_L) ) # assumes1:1 mapping b/n x&y
 
 # class containing constants 
 class Constants(object):
@@ -86,7 +86,8 @@ ifile = "KK_dataset.txt"
 # call model(s)
 
 # KK Temperature dependence model
-Tdep_KK_main( model[0].x, model[0].y, model[1].y, K, nBiomes, nPlants, ifile )
+Tdep_KK_main( model[0].x, model[0].y, model[1].y, K, nBiomes, nPlants, ifile, \
+model[2].y)
 
 #########################################################################
 
@@ -99,29 +100,53 @@ Tdep_KK_main( model[0].x, model[0].y, model[1].y, K, nBiomes, nPlants, ifile )
 # plot KK instance for T-dependence - averaged params other than PFT dep. Vcmax 
 x= model[0].x - T0C_degK
 
-y1= model[1].y[0]     
-plt.subplot(2, 1, 1)
+y1= model[1].y[0]      
+y1= np.log(model[1].y[0] )     
+plt.subplot(3, 1, 1)
 plt.plot(x, y1, 'g-', linewidth=1 )
 plt.title('KK - per biome')
 plt.ylabel('Vcmax/Vcmax_25')
 
 y2= model[0].y[0]     
-plt.subplot(2, 1, 2)
+plt.subplot(3, 1, 2)
 plt.plot(x, y2, 'g-', linewidth=1 )
 
 y2= model[0].y[1]     
-plt.subplot(2, 1, 2)
+plt.subplot(3, 1, 2)
 plt.plot(x, y2, 'r-', linewidth=1 )
 
 y2= model[0].y[2]     
-plt.subplot(2, 1, 2)
+plt.subplot(3, 1, 2)
 plt.plot(x, y2, 'b-', linewidth=1 )
+
+y3= model[2].y[0]     
+plt.subplot(3, 1, 3)
+plt.plot(x, y3, 'b-', linewidth=1 )
+
+y3= model[2].y[1]     
+plt.subplot(3, 1, 3)
+plt.plot(x, y3, 'b-', linewidth=1 )
+
+y3= model[2].y[2]     
+plt.subplot(3, 1, 3)
+plt.plot(x, y3, 'b-', linewidth=1 )
+
+#for i in range ( nPlants[0] ):
+for i in range ( 17 ):
+   y3= model[2].y[i]     
+   plt.subplot(3, 1, 3)
+   plt.plot(x, y3, 'b-', linewidth=1 )
+
+y2= model[0].y[0]     
+plt.subplot(3, 1, 3)
+plt.plot(x, y2, 'r-', linewidth=1 )
 
 plt.xlabel('Leaf Temperature (deg C)')
 plt.ylabel('Vcmax')
 
 plt.show()
 
+#########################################################################
 
 
 #plt.plot( x, y, 'bd' )

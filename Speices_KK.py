@@ -17,6 +17,7 @@ def Set_plants( nlines, nBiomes, pl, lines ):
       # check if the string is a comment
       cfield = lines[l].strip().split()
       if not lstr.startswith('#'):
+#extra condition heer to exclude species with zero fields
          pl.PlNumber[ll] = (cfield[0])
          pl.BiNumber[ll] = (cfield[1])
          pl.Vcmax_25[ll] = (cfield[4])

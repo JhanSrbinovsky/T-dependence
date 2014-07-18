@@ -10,12 +10,12 @@ import sys
 #import pylab as pl
 
 #import local, application specific modules
-from Tdep_KK_funcs import Tdep_KK_func
+from Tdep_KK_funcs import Tdep_KK_func, Tdep_KK_func_pl
 from Biomes_KK import Set_biomes
 from Speices_KK import Set_plants
 from DataSet import Read_dataset
 
-def Tdep_KK_main( T_leaf, Vcmax, Vcmax_KK, K, nBiomes, nPlants, ifile ):
+def Tdep_KK_main( T_leaf, Vcmax, Vcmax_KK_Bi, K, nBiomes, nPlants, ifile, Vcmax_KK_pl ):
    nPlants_max = 1000 
    nBiomes_max = 1000 
    # insert a break from the CLI for reading output
@@ -85,12 +85,25 @@ def Tdep_KK_main( T_leaf, Vcmax, Vcmax_KK, K, nBiomes, nPlants, ifile ):
       for i in range( len( T_leaf ) ):
          Vcmax[j][i]= bi[0].Vcmax_25[j] * fn_T_L[j][i]
          # normalized by Vcmax_25 per Biome
-         Vcmax_KK[j][i]= fn_T_L[j][i]
+         Vcmax_KK_Bi[j][i]= fn_T_L[j][i]
          #print "Vcmax ", Vcmax[j][i]
          #print "V_25 ", bi[0].Vcmax_25[j]
          #print "V_25 ", pl.Vcmax_25[i]
          #print "fn ", fn_T_L[j][i]
   
+   # eveluate f(T_leaf) per biome 
+   gn_T_L = np.zeros((nPlants[0], len( T_leaf ) ))
+
+   ## Call function 
+   for j in range( nPlants[0] ):
+      for i in range( len( T_leaf ) ):
+         gn_T_L[j][i] = Tdep_KK_func_pl( j, T_leaf[i], T_ref, K.R_gas, bi,pl )
+  
+   # Vcmax & Jmax described by KK(2007) Eq.(1)
+   for j in range( nPlants[0] ):
+      for i in range( len( T_leaf ) ):
+         Vcmax_KK_pl[j][i]= pl.Vcmax_25[j] * gn_T_L[j][i]
+
    #for i in range( len( T_leaf ) ):
    #   print "Vcmax_25 ", Vcmax[2][i] -  Vcmax[1][i]
 
