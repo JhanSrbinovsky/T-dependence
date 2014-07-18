@@ -22,8 +22,10 @@ def Tdep_KK_main( T_leaf, Vcmax, Jcmax, K, nBiomes, nPlants, ifile ):
    
    # f^n, model parameter: Vcmax_25 reference, normalization Temperature
    T_ref = 277.13 + 25. # 25 deg-C #hardwired 0 deg-C (K)
-  
-   Read_dataset( nPlants, nBiomes, ifile )
+
+   # Declare mutable object => lines read from config file
+   #lines = []
+   data = Read_dataset( nPlants, ifile )
 
 #########################################################################
 
@@ -52,10 +54,11 @@ def Tdep_KK_main( T_leaf, Vcmax, Jcmax, K, nBiomes, nPlants, ifile ):
    # instantiate classes: for plants
    pl = []
    pl = PlantDepParams_KK()
-
+   nPlants.append(0)
+   nBiomes.append(0)
+   # hardwired 0 ~ bc 0th model here
    # Set Plant dependent PArameters
-   Set_plants( nPlants, nBiomes, pl ) 
-
+   Set_plants( nPlants[0], nBiomes[0], pl, data ) 
 
    sys.exit()
    # BiomeIndex is the plants per biome in the KK dataset
