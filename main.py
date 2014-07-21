@@ -26,12 +26,10 @@ HowManyModels  =3
 
 # Set domain model[0].x: Leaf Temperature (Kelvin) 
 # with nT_L grads from Tmin:Tmax
-nT_L = 100
-n_max = 200
-# 0 deg-C in K
-T0C_degK = 277.13
+from main_data import nT_L, n_max 
 
 # model uses Kelvin but plots in degress-C
+from main_data import T0C_degK 
 Tmin0_degC = 0.; Tmax0_degC = 40.
 Tmin0 = Tmin0_degC + T0C_degK 
 Tmax0 = Tmax0_degC + T0C_degK 
@@ -43,19 +41,9 @@ Tmax0 = Tmax0_degC + T0C_degK
 #def main(argv):
 
 # GLOBAL decs so cn bring back various model data to here and manipulate
+from main_data import Models, Constants 
+from main_data import pl, bi 
 
-# class containing x & y data to plot    
-class Models(object):
-   def __init__(self):
-      self.x = np.zeros(nT_L) 
-      self.y = np.zeros( (n_max, nT_L) ) # assumes1:1 mapping b/n x&y
-
-# class containing constants 
-class Constants(object):
-   def __init__(self):
-      self.R_gas = 8.314462175    # Universal Gas Constant 
-
-# End global class declarations
 #########################################################################
 
 # instantiate classes
@@ -90,62 +78,70 @@ Tdep_KK_main( model[0].x, model[0].y, model[1].y, K, nBiomes, nPlants, ifile, \
 model[2].y)
 
 #########################################################################
-
-# plot model(s)
-
-# plot generically x against y
-#plot_generic( model[0].x, model[0].y )
-
-
-# plot KK instance for T-dependence - averaged params other than PFT dep. Vcmax 
-x= model[0].x - T0C_degK
-
-y1= model[1].y[0]      
-y1= np.log(model[1].y[0] )     
-plt.subplot(3, 1, 1)
-plt.plot(x, y1, 'g-', linewidth=1 )
-plt.title('KK - per biome')
-plt.ylabel('Vcmax/Vcmax_25')
-
-y2= model[0].y[0]     
-plt.subplot(3, 1, 2)
-plt.plot(x, y2, 'g-', linewidth=1 )
-
-y2= model[0].y[1]     
-plt.subplot(3, 1, 2)
-plt.plot(x, y2, 'r-', linewidth=1 )
-
-y2= model[0].y[2]     
-plt.subplot(3, 1, 2)
-plt.plot(x, y2, 'b-', linewidth=1 )
-
-y3= model[2].y[0]     
-plt.subplot(3, 1, 3)
-plt.plot(x, y3, 'b-', linewidth=1 )
-
-y3= model[2].y[1]     
-plt.subplot(3, 1, 3)
-plt.plot(x, y3, 'b-', linewidth=1 )
-
-y3= model[2].y[2]     
-plt.subplot(3, 1, 3)
-plt.plot(x, y3, 'b-', linewidth=1 )
-
-#for i in range ( nPlants[0] ):
-for i in range ( 17 ):
-   y3= model[2].y[i]     
-   plt.subplot(3, 1, 3)
-   plt.plot(x, y3, 'b-', linewidth=1 )
-
-y2= model[0].y[0]     
-plt.subplot(3, 1, 3)
-plt.plot(x, y2, 'r-', linewidth=1 )
-
-plt.xlabel('Leaf Temperature (deg C)')
-plt.ylabel('Vcmax')
-
-plt.show()
-
+#
+## plot model(s)
+#
+## plot generically x against y
+##plot_generic( model[0].x, model[0].y )
+#
+## plot KK instance for T-dependence - averaged params other than PFT dep. Vcmax 
+#x= model[0].x - T0C_degK
+#
+#y1= model[1].y[0]      
+##y1= np.log(model[1].y[0] )     
+#plt.subplot(3, 1, 1)
+#plt.plot(x, y1, 'g-', linewidth=1 )
+#plt.title('KK - per biome')
+#plt.ylabel('Vcmax/Vcmax_25')
+#
+## broadleaf
+#y2= model[0].y[0]     
+#plt.subplot(3, 1, 2)
+#plt.plot(x, y2, 'g-', linewidth=1 )
+#
+##coniferous
+#y2= model[0].y[1]     
+#plt.subplot(3, 1, 2)
+#plt.plot(x, y2, 'r-', linewidth=1 )
+#
+##herbaceous
+#y2= model[0].y[2]     
+#plt.subplot(3, 1, 2)
+#plt.plot(x, y2, 'b-', linewidth=1 )
+#
+#y3= model[2].y[0]     
+#plt.subplot(3, 1, 3)
+#plt.plot(x, y3, 'b-', linewidth=1 )
+#
+#y3= model[2].y[1]     
+#plt.subplot(3, 1, 3)
+#plt.plot(x, y3, 'b-', linewidth=1 )
+#
+#y3= model[2].y[2]     
+#plt.subplot(3, 1, 3)
+#plt.plot(x, y3, 'b-', linewidth=1 )
+#
+##for i in range ( nPlants[0] ):
+#for i in range ( 17 ):
+#   y3= model[2].y[i]     
+#   plt.subplot(3, 1, 3)
+#   plt.plot(x, y3, 'b-', linewidth=1 )
+#
+#y2= model[1].y[0]  * bi[0].Vcmax_25[0]    
+#plt.subplot(3, 1, 3)
+#plt.plot(x, y2, 'r-', linewidth=1 )
+#
+###for i in range ( nPlants[0] ):
+##j =99
+##y3= model[2].y[j]     
+##plt.subplot(3, 1, 3)
+##plt.plot(x, y3, 'y-', linewidth=1 )
+##
+#plt.xlabel('Leaf Temperature (deg C)')
+#plt.ylabel('Vcmax')
+#
+#plt.show()
+#
 #########################################################################
 
 

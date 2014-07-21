@@ -17,15 +17,14 @@ def Set_plants( nlines, nBiomes, pl, lines ):
       # check if the string is a comment
       cfield = lines[l].strip().split()
       if not lstr.startswith('#'):
-#extra condition heer to exclude species with zero fields
-         pl.PlNumber[ll] = (cfield[0])
-         pl.BiNumber[ll] = (cfield[1])
-         pl.Vcmax_25[ll] = (cfield[4])
-         pl.H_a[ll] = (cfield[5])
-         pl.H_d[ll] = (200000.)
-         pl.DeltaS[ll] = (cfield[6])
-         ll = ll + 1
-         
+         if int(cfield[5]) > -1:
+            pl.PlNumber[ll] = (cfield[0])
+            pl.BiNumber[ll] = (cfield[1])
+            pl.Vcmax_25[ll] = (cfield[4])
+            pl.H_a[ll] = (cfield[5])
+            pl.H_d[ll] = (200000.)
+            pl.DeltaS[ll] = (cfield[6])
+            ll = ll + 1
          #pl.Jmax_25.append(cfield[0])
    
    nBiomes.append( int( pl.BiNumber[ll-1] ) )

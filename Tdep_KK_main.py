@@ -7,17 +7,19 @@
 #import python modules
 import numpy as np 
 import sys
-#import pylab as pl
+import matplotlib.pyplot as plt
 
 #import local, application specific modules
 from Tdep_KK_funcs import Tdep_KK_func, Tdep_KK_func_pl
 from Biomes_KK import Set_biomes
 from Speices_KK import Set_plants
 from DataSet import Read_dataset
+from main_data import PlantDepParams_KK, BiomeDepParams_KK
+from main_data import pl, bi, T0C_degK 
+from main_data import nPlants_max, nBiomes_max 
 
 def Tdep_KK_main( T_leaf, Vcmax, Vcmax_KK_Bi, K, nBiomes, nPlants, ifile, Vcmax_KK_pl ):
-   nPlants_max = 1000 
-   nBiomes_max = 1000 
+ 
    # insert a break from the CLI for reading output
    print "\n"
    
@@ -27,42 +29,19 @@ def Tdep_KK_main( T_leaf, Vcmax, Vcmax_KK_Bi, K, nBiomes, nPlants, ifile, Vcmax_
    # Declare mutable object => lines read from config file
    nlines = []
    data = Read_dataset( nlines, ifile )
-
-#########################################################################
-
- # KK(2007) actually gives values per plant
-   class PlantDepParams_KK(object):
-      def __init__(self):
-         self.PlNumber = np.zeros( nPlants_max ) 
-         self.BiNumber = np.zeros( nPlants_max ) 
-         self.Vcmax_25 = np.zeros( nPlants_max ) 
-         self.Jmax_25  = np.zeros( nPlants_max ) 
-         self.H_a      = np.zeros( nPlants_max )    # activation energy
-         self.H_d      = np.zeros( nPlants_max )    # de-activation energy
-         self.DeltaS   = np.zeros( nPlants_max )    # Entropy factor
-    
-   class BiomeDepParams_KK(object):
-      def __init__(self):
-         self.BiNumber = np.zeros( nPlants_max ) 
-         self.Vcmax_25 = np.zeros( nBiomes_max ) 
-         self.Jmax_25  = np.zeros( nBiomes_max ) 
-         self.H_a      = np.zeros( nBiomes_max )    # activation energy
-         self.H_d      = np.zeros( nBiomes_max )    # de-activation energy
-         self.DeltaS   = np.zeros( nBiomes_max )    # Entropy factor
-    
-#########################################################################
-  
+ 
    # instantiate classes: for plants
-   pl = []
+   #pl = []
    pl = PlantDepParams_KK()
 
    # hardwired 0 ~ bc 0th model here
    # Set Plant dependent PArameters
    nPlants.append( Set_plants( nlines[0], nBiomes, pl, data ) )
+   print nPlants[0]
 
 #########################################################################
    nmethods = 3
-   bi = []
+   #bi = []
    for i in range( nmethods):
       bi.append( BiomeDepParams_KK() )
    
@@ -75,21 +54,148 @@ def Tdep_KK_main( T_leaf, Vcmax, Vcmax_KK_Bi, K, nBiomes, nPlants, ifile, Vcmax_
    # eveluate f(T_leaf) per biome 
    fn_T_L = np.zeros((nBiomes[0], len( T_leaf ) ))
 
-   ## Call function 
+   ## Call function defiining Temperature dependence 
    for j in range( nBiomes[0] ):
       for i in range( len( T_leaf ) ):
-         fn_T_L[j][i] = Tdep_KK_func( j, T_leaf[i], T_ref, K.R_gas, bi,pl )
+         fn_T_L[j][i] = Tdep_KK_func( j, T_leaf[i], T_ref, K.R_gas, bi, pl )
   
+#########################################################################
+
+   # Vcmax & Jmax described by KK(2007) Eq.(1)
+   # normalized by Vcmax_25 per Biome
+   for j in range( nBiomes[0] ):
+      for i in range( len( T_leaf ) ):
+         Vcmax_KK_Bi[j][i]= fn_T_L[j][i]
+   # this will endure over following plots = leaf temperature
+   x = T_leaf - T0C_degK
+
+   plt.title('KK - per biome')
+   plt.ylabel('Vcmax/Vcmax_25')
+   y1= Vcmax_KK_Bi[0]
+   plt.plot(x, y1, 'g-', linewidth=1 )
+   
+   plt.show()
+
+#########################################################################
+
+   # Vcmax & Jmax described by KK(2007) Eq.(1)
+   # NOT normalized by Vcmax_25 per Biome
+   for j in range( nBiomes[0] ):
+      for i in range( len( T_leaf ) ):
+         Vcmax_KK_Bi[j][i]= bi[0].Vcmax_25[j] * fn_T_L[j][i]
+   
+   plt.title('KK - per biome')
+   plt.ylabel('Vcmax')
+   
+   y1= Vcmax_KK_Bi[0]
+   plt.plot(x, y1, 'r-', linewidth=1 )
+
+   y1= Vcmax_KK_Bi[1]
+   plt.plot(x, y1, 'b-', linewidth=1 )
+
+   y1= Vcmax_KK_Bi[2]
+   plt.plot(x, y1, 'g-', linewidth=1 )
+
+   plt.show()
+  
+#########################################################################
+
+   # eveluate f(T_leaf) per plant 
+   gn_T_L = np.zeros((nPlants[0], len( T_leaf ) ))
+
+   for j in range( nPlants[0] ):
+      for i in range( len( T_leaf ) ):
+         gn_T_L[j][i] = Tdep_KK_func_pl( j, T_leaf[i], T_ref, K.R_gas, bi,pl )
+  
+   # Vcmax per plant 
+   for j in range( nPlants[0] ):
+      for i in range( len( T_leaf ) ):
+         Vcmax_KK_pl[j][i]= pl.Vcmax_25[j] * gn_T_L[j][i]
+
+   # plot Vcmax per plant in first Biome group 
+   for j in range ( 17 ):
+      y3= Vcmax_KK_pl[j]
+      plt.plot(x, y3, 'r-', linewidth=1 )
+      
+   # generic desc of T-dependece
+   y1= Vcmax_KK_Bi[0]
+   plt.plot(x, y1, 'g-', linewidth=1 )
+   
+   plt.show()
+ 
+   # plot Vcmax per plant in 2nd Biome group 
+   for j in range ( 26 ):
+      y3= Vcmax_KK_pl[j]
+      plt.plot(x, y3, 'r-', linewidth=1 )
+      
+   # generic desc of T-dependece
+   y1= Vcmax_KK_Bi[1]
+   plt.plot(x, y1, 'g-', linewidth=1 )
+   
+   plt.show()
+ 
+   # plot Vcmax per plant in first Biome group 
+   for j in range ( 53 ):
+      y3= Vcmax_KK_pl[j]
+      plt.plot(x, y3, 'r-', linewidth=1 )
+      
+   # generic desc of T-dependece
+   y1= Vcmax_KK_Bi[2]
+   plt.plot(x, y1, 'g-', linewidth=1 )
+   
+   plt.show()
+   
+   
+    
+   # Vcmax & Jmax described by KK(2007) Eq.(1)
+   #for j in range( nBiomes[0] ):
+   #j=99
+   #for i in range( len( T_leaf ) ):
+   #   Vcmax[j][i]= bi[0].Vcmax_25[j] * fn_T_L[j][i]
+   #   # normalized by Vcmax_25 per Biome
+ 
+   #for i in range( len( T_leaf ) ):
+   #   print "Vcmax_25 ", Vcmax[2][i] -  Vcmax[1][i]
+
+   #for i in range( nBiomes):
+   #   for j in range( len( T_leaf ) ):
+   #      Vcmax = Vcmax_25[i] * fn_T_L[j]
+
+
+################################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
    # Vcmax & Jmax described by KK(2007) Eq.(1)
    for j in range( nBiomes[0] ):
       for i in range( len( T_leaf ) ):
-         Vcmax[j][i]= bi[0].Vcmax_25[j] * fn_T_L[j][i]
+         Vcmax_KK_Bi[j][i]= bi[0].Vcmax_25[j] * fn_T_L[j][i]
          # normalized by Vcmax_25 per Biome
-         Vcmax_KK_Bi[j][i]= fn_T_L[j][i]
-         #print "Vcmax ", Vcmax[j][i]
-         #print "V_25 ", bi[0].Vcmax_25[j]
-         #print "V_25 ", pl.Vcmax_25[i]
-         #print "fn ", fn_T_L[j][i]
+         #Vcmax_KK_Bi[j][i]= fn_T_L[j][i]
   
    # eveluate f(T_leaf) per biome 
    gn_T_L = np.zeros((nPlants[0], len( T_leaf ) ))
@@ -104,6 +210,13 @@ def Tdep_KK_main( T_leaf, Vcmax, Vcmax_KK_Bi, K, nBiomes, nPlants, ifile, Vcmax_
       for i in range( len( T_leaf ) ):
          Vcmax_KK_pl[j][i]= pl.Vcmax_25[j] * gn_T_L[j][i]
 
+   # Vcmax & Jmax described by KK(2007) Eq.(1)
+   #for j in range( nBiomes[0] ):
+   #j=99
+   #for i in range( len( T_leaf ) ):
+   #   Vcmax[j][i]= bi[0].Vcmax_25[j] * fn_T_L[j][i]
+   #   # normalized by Vcmax_25 per Biome
+ 
    #for i in range( len( T_leaf ) ):
    #   print "Vcmax_25 ", Vcmax[2][i] -  Vcmax[1][i]
 
