@@ -27,18 +27,21 @@ def Set_biomes( nBiomes, bi, nPlants, pl ):
          H_a_bi[0]      = pl.H_a[ll] + H_a_bi[0]
          DeltaS_bi[0]   = pl.DeltaS[ll] + DeltaS_bi[0]
          bictr[0]+=1
+         print 'bi[0] ', ll
           
       if( pl.BiNumber[ll] == 2 ):
          Vcmax_25_bi[1] = pl.Vcmax_25[ll] + Vcmax_25_bi[1]
          H_a_bi[1]      = pl.H_a[ll] + H_a_bi[1]
          DeltaS_bi[1]   = pl.DeltaS[ll] + DeltaS_bi[1]
          bictr[1]+=1
+         print 'bi[1] ', ll
       
       if( pl.BiNumber[ll] == 3 ):
          Vcmax_25_bi[2] = pl.Vcmax_25[ll] + Vcmax_25_bi[2]
          H_a_bi[2]      = pl.H_a[ll] + H_a_bi[2]
          DeltaS_bi[2]   = pl.DeltaS[ll] + DeltaS_bi[2]
          bictr[2]+=1
+         print 'bi[2] ', ll
 
    # Average over all plants
    Vcmax_25_av_pl = Vcmax_25_tot / nPlants
@@ -50,7 +53,8 @@ def Set_biomes( nBiomes, bi, nPlants, pl ):
       Vcmax_25_bi[lb] = Vcmax_25_bi[lb] / bictr[lb] 
       H_a_bi[lb]      = H_a_bi[lb] / bictr[lb]
       DeltaS_bi[lb]   = DeltaS_bi[lb] / bictr[lb]
-   
+      print "bictr \n", bictr[lb] 
+
 ################################################################################
    
    # KK use PFT dependent Vcmax, Jmax and these fit values for others

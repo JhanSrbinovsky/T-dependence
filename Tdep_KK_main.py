@@ -37,7 +37,7 @@ def Tdep_KK_main( T_leaf, Vcmax, Vcmax_KK_Bi, K, nBiomes, nPlants, ifile, Vcmax_
    # hardwired 0 ~ bc 0th model here
    # Set Plant dependent PArameters
    nPlants.append( Set_plants( nlines[0], nBiomes, pl, data ) )
-   print nPlants[0]
+   #print nPlants[0]
 
 #########################################################################
    nmethods = 3
@@ -113,35 +113,35 @@ def Tdep_KK_main( T_leaf, Vcmax, Vcmax_KK_Bi, K, nBiomes, nPlants, ifile, Vcmax_
          Vcmax_KK_pl[j][i]= pl.Vcmax_25[j] * gn_T_L[j][i]
 
    # plot Vcmax per plant in first Biome group 
-   for j in range ( 17 ):
+   for j in range ( 0,14 ):
       y3= Vcmax_KK_pl[j]
       plt.plot(x, y3, 'r-', linewidth=1 )
       
    # generic desc of T-dependece
    y1= Vcmax_KK_Bi[0]
-   plt.plot(x, y1, 'g-', linewidth=1 )
+   plt.plot(x, y1, 'g-', linewidth=2 )
    
    plt.show()
  
    # plot Vcmax per plant in 2nd Biome group 
-   for j in range ( 26 ):
+   for j in range ( 15,23 ):
       y3= Vcmax_KK_pl[j]
       plt.plot(x, y3, 'r-', linewidth=1 )
       
    # generic desc of T-dependece
    y1= Vcmax_KK_Bi[1]
-   plt.plot(x, y1, 'g-', linewidth=1 )
+   plt.plot(x, y1, 'g-', linewidth=2 )
    
    plt.show()
  
    # plot Vcmax per plant in first Biome group 
-   for j in range ( 53 ):
+   for j in range ( 24,47 ):
       y3= Vcmax_KK_pl[j]
       plt.plot(x, y3, 'r-', linewidth=1 )
       
    # generic desc of T-dependece
    y1= Vcmax_KK_Bi[2]
-   plt.plot(x, y1, 'g-', linewidth=1 )
+   plt.plot(x, y1, 'g-', linewidth=2 )
    
    plt.show()
    
