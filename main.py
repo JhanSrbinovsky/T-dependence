@@ -30,7 +30,7 @@ from main_data import nT_L, n_max
 
 # model uses Kelvin but plots in degress-C
 from main_data import T0C_degK 
-Tmin0_degC = 0.; Tmax0_degC = 40.
+Tmin0_degC = 0.; Tmax0_degC = 50.
 Tmin0 = Tmin0_degC + T0C_degK 
 Tmax0 = Tmax0_degC + T0C_degK 
 
@@ -64,20 +64,37 @@ print "\n"
 
 # Model 1 - KK T-dependence
 
-# Fix nBiomes[i], nPlants[i] from dataSet
-nBiomes     = [] 
-nPlants     = [] 
-
 # Dataset to read 
 ifile = "KK_dataset.txt"
 
 # call model(s)
 
 # KK Temperature dependence model
-Tdep_KK_main( model[0].x, model[0].y, model[1].y, K, nBiomes, nPlants, ifile, \
-model[2].y)
+#Tdep_KK_main( model[0].x, model[0].y, model[1].y, K, nBiomes, nPlants, ifile, \
+#model[2].y)
+Tdep_KK_main( model[0].x, ifile, K )
 
 #########################################################################
+
+from Tdep_CABLE import T_dep_CABLE_C3 
+T_dep_CABLE_C3( model[0].x, ifile, K ) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #
 ## plot model(s)
 #

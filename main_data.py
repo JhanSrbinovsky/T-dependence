@@ -2,6 +2,9 @@
 
 import numpy as np
 
+show_plot = False
+
+
 # 0 deg-C in K
 T0C_degK = 277.13
 
