@@ -301,8 +301,8 @@ def Tdep_KK_main( T_leaf, ifile ):
       KK_pl[j] = Vcmax_KK_pl[j] / pl.Vcmax_25[j] 
    
    #print "KK_bi ", KK_pl 
-   #return( KK_pl, KK_bi ) 
-   return( Ksum  ) 
+   return( KK_pl, Ksum ) 
+   #return( Ksum  ) 
  
 ##################
 

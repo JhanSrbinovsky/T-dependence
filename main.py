@@ -54,8 +54,8 @@ from Tdep_KK_main import Tdep_KK_main
 ifile = "KK_dataset.txt"
 
 # KK Temperature dependence model
-#KK_pl, KK_bi = Tdep_KK_main( T_leaf, ifile )
-KK_bi = Tdep_KK_main( T_leaf, ifile )
+KK_pl, KK_bi = Tdep_KK_main( T_leaf, ifile )
+#KK_bi = Tdep_KK_main( T_leaf, ifile )
 print "KK_bi ", KK_bi 
 
 #########################################################################
@@ -76,17 +76,17 @@ if show_plot is True:
    # plot Vcmax per plant in first Biome group 
    for j in range ( 0,14 ):
       y3 = KK_pl[j]
-      #plt.plot(x, y3, 'g-', linewidth=1 )
+      plt.plot(x, y3, 'g-', linewidth=1 )
    
    # generic desc of T-dependece
    y1= KK_bi
    plt.plot(x, KK_bi, 'r-', linewidth=2 )
-   plt.show()    
-   #y1 = CABLE_c3 
-   #plt.plot(x, y1, 'b-', linewidth=2 )
+   y1 = CABLE_c3 
+   plt.plot(x, y1, 'b-', linewidth=2 )
+   #plt.show()    
    #
-   #plt.savefig("KKvCABLE.pdf")
-   #plt.close() 
+   plt.savefig("KKvCABLE.pdf")
+   plt.close() 
  
 ##################
 
