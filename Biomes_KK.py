@@ -1,6 +1,8 @@
 import numpy as np
 import math as m
 
+from main_data import R_gas
+
 def Set_biomes( nBiomes, bi, nPlants, pl ): 
    
    # Average over plants and biomes.
@@ -15,6 +17,8 @@ def Set_biomes( nBiomes, bi, nPlants, pl ):
    DeltaS_bi   = np.zeros(nBiomes)
 
 ################################################################################
+   
+   # Compute averages over Biome from dataset
 
    bictr = np.zeros(nBiomes)   
    for ll in range( nPlants ):
@@ -56,11 +60,16 @@ def Set_biomes( nBiomes, bi, nPlants, pl ):
    # KK use PFT dependent Vcmax, Jmax and these fit values for others
    # this is primarily for reproducing their plot   
    for i in range( nBiomes ):
-      bi[0].Vcmax_25[i] = Vcmax_25_bi[i] *1.e-6
+      bi[0].Vcmax_25[i] = Vcmax_25_bi[i]
+      print "Vcmax", bi[0].Vcmax_25[i] 
       bi[0].H_a[i] = 72.0 *1000.0 #+/- 3.3 (kJ) 
       bi[0].DeltaS[i] = 649.0 #+/- 1.43
       bi[0].H_d[i] = 200000.
-   
+      fraction = bi[0].H_a[i] / ( bi[0].H_d[i] - bi[0].H_a[i] )
+      
+      denom =  ( bi[0].DeltaS[i] - ( R_gas * np.log(fraction) )  )
+      bi[0].T_opt[i] = bi[0].H_d[i] / denom 
+  
 ################################################################################
 
    #for i in range( BiomeIndex[0] ):

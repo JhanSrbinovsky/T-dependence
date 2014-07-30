@@ -28,7 +28,7 @@ def Tdep_KK_func( i, T_L, T_ref, R_gas, bi, pl ):
    # leaf Temperature
    Entropy_leaf = ( T_L * bi[0].DeltaS[i] ) - bi[0].H_d[i]
    norm_leaf = R_gas * T_L
-   Deactiv_leaf = 1. + Tdep_KK_funcExpFuncs( Entropy_ref, norm_ref )
+   Deactiv_leaf = 1. + Tdep_KK_funcExpFuncs( Entropy_leaf, norm_leaf )
   
    fn_T_L =  Activation * Deactiv_ref / Deactiv_leaf
    
@@ -60,7 +60,7 @@ def Tdep_KK_func_pl( i, T_L, T_ref, R_gas, bi, pl ):
    # leaf Temperature
    Entropy_leaf = ( T_L * pl.DeltaS[i] ) - pl.H_d[i]
    norm_leaf = R_gas * T_L
-   Deactiv_leaf = 1. + Tdep_KK_funcExpFuncs( Entropy_ref, norm_ref )
+   Deactiv_leaf = 1. + Tdep_KK_funcExpFuncs( Entropy_leaf, norm_leaf )
   
    fn_T_L =  Activation * Deactiv_ref / Deactiv_leaf
    

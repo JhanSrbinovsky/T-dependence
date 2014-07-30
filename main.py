@@ -10,77 +10,85 @@ __author__ = 'Jhan Srbinovsky'
 
 #import python modules
 import sys
-import numpy as np 
 import matplotlib.pyplot as plt
-
-#import local, application specific modules
-from Tdep_KK_main import Tdep_KK_main
-from DataSet import Read_dataset
+import numpy as np
 
 # End python header
-#########################################################################
-
-# GLOBAL model parmeters
-
-HowManyModels  =3 
-
-# Set domain model[0].x: Leaf Temperature (Kelvin) 
-# with nT_L grads from Tmin:Tmax
-from main_data import nT_L, n_max 
-
-# model uses Kelvin but plots in degress-C
-from main_data import T0C_degK 
-Tmin0_degC = 0.; Tmax0_degC = 50.
-Tmin0 = Tmin0_degC + T0C_degK 
-Tmax0 = Tmax0_degC + T0C_degK 
-
-# End Model Header
 #########################################################################
 
 # commented to run interactively
 #def main(argv):
 
-# GLOBAL decs so cn bring back various model data to here and manipulate
-from main_data import Models, Constants 
-from main_data import pl, bi 
+# GLOBAL decs so can plot models on same domain 
+from main_data import T_leaf#, KK_pl, KK_bi, CABLE_c3 
+from main_data import T0C_degK, nT_L
 
 #########################################################################
 
-# instantiate classes
-
-K = Constants()    
-
-model= []
-for i in range(HowManyModels):
-   model.append( Models() )
-
-# Set domain of Leaf Temperature (Kelvin) with nx grads from Tmin:Tmax
-model[0].x = np.linspace(Tmin0, Tmax0, nT_L)
-
+#def test_fn( K ):
+#   print K
+#   K = [1,2,3,4,5]
+#   print K
+#   return K
 #########################################################################
 
 # insert a break from the CLI for reading output
 print "\n"
 
-# Model 1 - KK T-dependence
+#KK_pl    = []
+#KK_bi    = []
+CABLE_c3 = []
+#K = test_fn( KK_pl ) 
+#print K
+#sys.exit()
+#CABLE_c3 = np.zeros( (nT_L) ) 
+
+KK_pl    = np.zeros( (15, nT_L) ) 
+KK_bi    = np.zeros( (nT_L) ) 
+# call model(s)
+
+#import local, application specific modules
+from Tdep_KK_main import Tdep_KK_main
 
 # Dataset to read 
 ifile = "KK_dataset.txt"
 
-# call model(s)
-
 # KK Temperature dependence model
-#Tdep_KK_main( model[0].x, model[0].y, model[1].y, K, nBiomes, nPlants, ifile, \
-#model[2].y)
-Tdep_KK_main( model[0].x, ifile, K )
+#KK_pl, KK_bi = Tdep_KK_main( T_leaf, ifile )
+KK_bi = Tdep_KK_main( T_leaf, ifile )
+print "KK_bi ", KK_bi 
 
 #########################################################################
 
 from Tdep_CABLE import T_dep_CABLE_C3 
-T_dep_CABLE_C3( model[0].x, ifile, K ) 
+CABLE_c3 = T_dep_CABLE_C3( T_leaf, ifile, CABLE_c3 ) 
 
+##################
+show_plot = False
+show_plot = True
 
+x = T_leaf - T0C_degK 
 
+if show_plot is True:   
+   plt.title('Temp-dep per plant - KK Biome 1 vs CABLE c3')
+   plt.ylabel('Vcmax')
+
+   # plot Vcmax per plant in first Biome group 
+   for j in range ( 0,14 ):
+      y3 = KK_pl[j]
+      #plt.plot(x, y3, 'g-', linewidth=1 )
+   
+   # generic desc of T-dependece
+   y1= KK_bi
+   plt.plot(x, KK_bi, 'r-', linewidth=2 )
+   plt.show()    
+   #y1 = CABLE_c3 
+   #plt.plot(x, y1, 'b-', linewidth=2 )
+   #
+   #plt.savefig("KKvCABLE.pdf")
+   #plt.close() 
+ 
+##################
 
 
 
@@ -191,5 +199,4 @@ T_dep_CABLE_C3( model[0].x, ifile, K )
 #   main(sys.argv[1:])
 
 ################################################################################
-
 
